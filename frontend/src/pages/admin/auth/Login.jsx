@@ -16,7 +16,7 @@ const Login = () => {
     <div className="md:min-h-[500px] md:max-w-[1280px] mx-auto">
       <div className="shadow-md rounded-xl my-20 border md:max-w-[500px] mx-auto">
         <form className="p-15 flex-col gap-10 my-10" onSubmit={handleSubmit}>
-          <h2 className="text-center text-3xl mb-10 border-b-1">Login here</h2>
+          <h2 className="text-center text-3xl mb-10 border-b-1">Admin Login</h2>
           <div>
             <Label htmlFor="username" className="mb-3">
               User Name
@@ -46,13 +46,13 @@ const Login = () => {
               Login
             </Button>
             <div className="mt-10 flex justify-between border-t-1 py-3">
-              <p>Don't have account?</p>
+              <p>If you are not admin?</p>
               <Button
                 variant="outline"
                 className=" cursor-pointer"
-                onClick={() => navigate("/client/register")}
+                onClick={() => navigate("/client/login")}
               >
-                Register now
+                Client Login
               </Button>
             </div>
           </div>
