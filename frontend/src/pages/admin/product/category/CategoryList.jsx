@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import AddCategory from "./AddCategory";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import {
   Table,
@@ -14,22 +15,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AdminNavigationBar from "../../../../layout/AdminNavigationBar";
+import { toast } from "react-toastify";
 
 const CategoryList = () => {
-  const categories = [
-    {
-      id: 1,
-      title: "electronics",
-    },
-    {
-      id: 2,
-      title: "dress",
-    },
-    {
-      id: 3,
-      title: "food",
-    },
-  ];
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+  const fetchCategories = async () => {
+    const response = await axios.get(
+      "http://localhost:5000/api/ecommerce/category/list"
+    );
+    console.log(response);
+    if (response.data.data.length === 0) {
+      toast.error("No Data Found");
+    }
+    setCategories(response.data.data);
+  };
   const [categoryList, setCategoryList] = useState(categories);
   const navigate = useNavigate();
   return (
@@ -56,7 +58,7 @@ const CategoryList = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categoryList.map((category) => (
+              {categories.map((category) => (
                 <TableRow className="[&>*]:p-5" key={category.id}>
                   <TableCell className="font-medium">{category.id}</TableCell>
                   <TableCell className="text-right capitalize">

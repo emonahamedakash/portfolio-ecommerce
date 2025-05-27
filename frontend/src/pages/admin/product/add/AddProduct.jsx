@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdminNavigationBar from "../../../../layout/AdminNavigationBar";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,20 @@ const AddProduct = () => {
   const [price, setPrice] = useState(0);
   const [categoryId, setCategoryId] = useState(0);
   const [stock, setStock] = useState(0);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    const response = await axios.get(
+      "http://localhost:5000/api/ecommerce/category/list"
+    );
+    console.log(response);
+    setCategories(response.data.data);
+  };
+
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -80,10 +95,17 @@ const AddProduct = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Categories</SelectLabel>
-                    <SelectItem value="electronics">Electronics</SelectItem>
-                    <SelectItem value="dress">Dress</SelectItem>
-                    <SelectItem value="food">Food</SelectItem>
-                    <SelectItem value="makeup">Makeup</SelectItem>
+                    {categories?.map((each) => {
+                      return (
+                        <SelectItem
+                          value={each.title}
+                          key={each.value}
+                          className="capitalize"
+                        >
+                          {each.title}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectGroup>
                 </SelectContent>
               </Select>

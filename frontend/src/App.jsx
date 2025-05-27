@@ -14,6 +14,8 @@ import CategoryList from "./pages/admin/product/category/CategoryList";
 import AddCategory from "./pages/admin/product/category/AddCategory";
 import OrderList from "./pages/admin/order/OrderList";
 import UserList from "./pages/admin/users/UserList";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.css";
 
 function App() {
   return (
@@ -38,6 +40,7 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
+      <ToastContainer />
     </div>
   );
 }

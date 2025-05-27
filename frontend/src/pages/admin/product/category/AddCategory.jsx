@@ -1,17 +1,30 @@
 import React, { useState } from "react";
 import AdminNavigationBar from "../../../../layout/AdminNavigationBar";
+import axios from "axios";
+import { baseUrl } from "../../../../../baseUrl";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "react-toastify";
 
 const AddCategory = () => {
   const [categoryTitle, setCategoryTitle] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted", categoryTitle);
-    navigate("/admin/product/category");
+    try {
+      const response = axios.post(`${baseUrl}/category/create`, {
+        title: categoryTitle,
+      });
+      if (response) {
+        navigate("/admin/product/category");
+      } else {
+        toast.error("Something went wrong", { autoClose: 1500 });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div className="md:max-w-[1280px] mx-auto">
