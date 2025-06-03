@@ -1,3 +1,4 @@
+// config/db.js
 import knex from "knex";
 import config from "../knexfile.js";
 

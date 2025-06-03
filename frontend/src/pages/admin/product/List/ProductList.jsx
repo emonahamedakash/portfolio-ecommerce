@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AdminNavigationBar from "../../../../layout/AdminNavigationBar";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -21,9 +22,24 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../../../../../baseUrl";
 
 const ProductList = () => {
   //name, price, description, category_id, stock, image_url
+  const [productList, setProductList] = useState([]);
+
+  useEffect(() => {
+    fetchProductList();
+  }, []);
+  const fetchProductList = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/product/list`);
+      console.log(response);
+      setProductList(response?.data?.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const products = [
     {
       id: 1,
@@ -96,14 +112,14 @@ const ProductList = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {products.map((product) => (
+              {productList.map((product) => (
                 <TableRow className="[&>*]:p-5" key={product.id}>
                   <TableCell className="font-medium">{product.id}</TableCell>
                   <TableCell>{product.imageUrl}</TableCell>
                   <TableCell>{product.name}</TableCell>
                   <TableCell>{product.description}</TableCell>
                   <TableCell>{product.price}</TableCell>
-                  <TableCell>{product.categoryId}</TableCell>
+                  <TableCell>{product.category_id}</TableCell>
                   <TableCell>{product.stock}</TableCell>
                   <TableCell className="text-right capitalize">
                     {product.status == 1 ? (

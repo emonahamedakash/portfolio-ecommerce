@@ -15,19 +15,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { baseUrl } from "../../../../../baseUrl";
 
 const AddProduct = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [categoryId, setCategoryId] = useState(0);
+  const [categoryId, setCategoryId] = useState(12);
   const [stock, setStock] = useState(0);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchCategories();
   }, []);
-
   const fetchCategories = async () => {
     const response = await axios.get(
       "http://localhost:5000/api/ecommerce/category/list"
@@ -37,9 +38,32 @@ const AddProduct = () => {
   };
 
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
+
+    try {
+      setLoading(true); // Assuming you have a loading state
+      const response = await axios.post(`${baseUrl}/product/create`, {
+        name,
+        price,
+        description,
+        category_id: categoryId,
+        stock,
+        image_url: "No Image Data", // TODO: Implement actual image upload
+        main_image: "No image data",
+      });
+
+      // Optional: show success message
+      alert("Product created successfully!");
+      navigate("/admin/product/list");
+    } catch (err) {
+      console.error("Error creating product:", err);
+      // Show error to user
+      alert(`Error: ${err.response?.data?.message || err.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="md:max-w-[1280px] mx-auto">
@@ -99,7 +123,7 @@ const AddProduct = () => {
                       return (
                         <SelectItem
                           value={each.title}
-                          key={each.value}
+                          key={each.id}
                           className="capitalize"
                         >
                           {each.title}
